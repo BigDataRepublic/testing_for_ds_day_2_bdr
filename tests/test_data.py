@@ -42,6 +42,6 @@ def test_scrape_duration_from_recipe_page_empty(monkeypatch: MonkeyPatch) -> Non
 # of these reasons are satisfied by adding parameter values to the next test.
 
 
-@pytest.mark.parametrize("text, expected", [("1 uur", 60)])
+@pytest.mark.parametrize("text, expected", [("1 uur", 60), ("", 0), (" min.", 0)])
 def test_parse_duration(text: str, expected: int) -> None:
     assert parse_duration(text) == expected
