@@ -20,6 +20,14 @@ def test_scrape_duration_from_recipe_page(monkeypatch: MonkeyPatch) -> None:
 # -- Exercise 1 --
 # The previous test doesn't cover every line of scrape_duration_from_recipe_page(). Find out with
 # ```pytest --cov dishwashers tests\test_data.py``` which lines of that function are not covered. Write a test for them.
+def test_scrape_duration_from_recipe_page_empty(monkeypatch: MonkeyPatch) -> None:
+    class MockRequestsGet:
+        def __init__(self, url: str):
+            self.content = ""
+
+    monkeypatch.setattr(requests, "get", MockRequestsGet)
+    duration = scrape_duration_from_recipe_page(url="")
+    assert duration == ""
 
 
 # -- Exercise 2 --
@@ -33,7 +41,7 @@ def test_scrape_duration_from_recipe_page(monkeypatch: MonkeyPatch) -> None:
 # Besides full line coverage, we want to make sure that a function works for all realistic inputs. Make sure that both
 # of these reasons are satisfied by adding parameter values to the next test.
 
-@pytest.mark.parametrize("text, expected",
-                         [("1 uur", 60)])
+
+@pytest.mark.parametrize("text, expected", [("1 uur", 60)])
 def test_parse_duration(text: str, expected: int) -> None:
     assert parse_duration(text) == expected
